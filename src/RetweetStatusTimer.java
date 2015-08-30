@@ -32,6 +32,7 @@ public class RetweetStatusTimer {
 
     private void retweet(final Twitter twitter) {
         Date date = Calendar.getInstance().getTime();
+        //System.out.println(date.getTime());
         Query query = getQuery("");
         try {
             for (String text : searchingText) {
@@ -41,7 +42,7 @@ public class RetweetStatusTimer {
                     Date statusTime = status.getCreatedAt();
                     long ms = date.getTime() - statusTime.getTime();
                     if (ms <= 60L * 1000) {
-                        System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+                        //System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
                         twitter.retweetStatus(status.getId());
                     } else {
                         break;

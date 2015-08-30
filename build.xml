@@ -1,0 +1,60 @@
+<project name="TestAnt" default="all">
+    <target name="all" description="Super Ant!">
+        <echo>Ant job started!</echo>
+    </target>
+
+    <target name="init">
+        <property name="dir.build" value="build"/>
+        <property name="dir.classes" value="${dir.build}/classes"/>
+        <property name="dir.src.java" value="src"/>
+        <property name="classpath" value="E:\Java\twitter4j-4.0.4\lib"/>
+
+        <!-- Classpath for the project -->
+        <path id="master-classpath">
+            <fileset dir="${classpath}">
+            </fileset>
+        </path>
+    </target>
+
+    <target name="clean" depends="init">
+        <delete dir="${dir.classes}" />
+    </target>
+
+    <target name="prepare" depends="clean">
+        <mkdir dir="${dir.classes}" />
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac srcdir="${dir.src.java}" destdir="${dir.classes}" >
+            <classpath refid="master-classpath"/>
+        </javac>
+    </target>
+
+    <target name="check-build-local-properties">
+        <condition property="build.local.properties.exists.here">
+            <available file="build-local.properties"/>
+        </condition>
+    </target>
+
+    <target name="load-build-local-properties" depends="check-build-local-properties"
+            if="build.local.properties.exists.here">
+        <property file="build-local.properties"/>
+    </target>
+
+    <target name="remoteCopyDevStart" depends="load-build-local-properties">
+        <scp file="src/dev_start.sh" todir="${username}:${password}@${ip}:${dir}" trust="true" />
+    </target>
+
+    <target name="remoteCopy" depends="compile, load-build-local-properties, remoteCopyDevStart" >
+        <scp todir="${username}:${password}@${ip}:${dir}" trust="true" >
+            <fileset dir="build/classes"/>
+        </scp>
+    </target>
+
+    <target name="remoteCopyTwitter4j" depends="load-build-local-properties" >
+        <scp todir="${username}:${password}@${ip}:${twitter4jLib}" trust="true" >
+            <fileset dir="E:\Java\twitter4j-4.0.4\lib"/>
+        </scp>
+    </target>
+
+</project>

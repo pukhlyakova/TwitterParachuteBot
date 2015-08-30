@@ -41,16 +41,14 @@ public class RetweetStatusTimer {
                 for (Status status : result.getTweets()) {
                     Date statusTime = status.getCreatedAt();
                     long ms = date.getTime() - statusTime.getTime();
-                    if (ms <= 60L * 1000) {
+                    if (!status.isRetweet()) {
                         //System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
                         twitter.retweetStatus(status.getId());
-                    } else {
-                        break;
                     }
                 }
             }
         } catch(TwitterException e) {
-            System.out.println(e);
+            //System.out.println(e);
         }
     }
 

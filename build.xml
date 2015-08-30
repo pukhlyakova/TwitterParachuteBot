@@ -45,7 +45,7 @@
         <scp file="src/dev_start.sh" todir="${username}:${password}@${ip}:${dir}" trust="true" />
     </target>
 
-    <target name="remoteCopy" depends="compile, load-build-local-properties, remoteCopyDevStart" >
+    <target name="remoteCopy" depends="compile, load-build-local-properties" >
         <scp todir="${username}:${password}@${ip}:${dir}" trust="true" >
             <fileset dir="build/classes"/>
         </scp>
